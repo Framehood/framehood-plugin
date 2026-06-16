@@ -35,3 +35,7 @@ the `framehood` skill guides it to the right tool.
 
 - Docs: https://docs.framehood.ai
 - Site: https://framehood.ai
+
+## License
+
+Framehood is a proprietary, source-available product. See [LICENSE](LICENSE).
