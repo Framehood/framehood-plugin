@@ -4,6 +4,9 @@
     "name": "Framehood",
     "url": "https://framehood.ai"
   },
+  "metadata": {
+    "description": "Official Framehood plugins for Claude — media generation over MCP."
+  },
   "plugins": [
     {
       "name": "framehood",
