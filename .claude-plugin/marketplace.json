@@ -1,0 +1,14 @@
+{
+  "name": "framehood",
+  "owner": {
+    "name": "Framehood",
+    "url": "https://framehood.ai"
+  },
+  "plugins": [
+    {
+      "name": "framehood",
+      "source": ".",
+      "description": "Generate and edit images, video and audio from Claude via the Framehood MCP server. Bundles the remote MCP endpoint, a /framehood command, and usage skills."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "framehood": {
+      "type": "http",
+      "url": "https://mcp.framehood.ai/mcp"
+    }
+  }
+}
