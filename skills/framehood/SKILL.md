@@ -13,7 +13,7 @@ what you want (an image, a video, a voiceover); the server picks the model.
 | Tool | Actions | Output |
 |------|---------|--------|
 | `image` | `create` (text→image), `edit`, `upscale`, `animate` (image→video), `actor_sheet` | image (or video for animate) |
-| `video` | `edit`, `edit_ref`, `swap`, `lipsync`, `captions`, `upscale`, `assemble`, `mix_audio`, `scene`, `reframe` | video |
+| `video` | `edit`, `edit_ref`, `swap`, `lipsync`, `captions`, `upscale`, `assemble`, `mix_audio`, `scene` | video |
 | `audio` | `speak` (text→voice), `sfx`, `music`, `mix`, `concat` | audio |
 | `qa` | quality check a generated asset | report |
 | `files` | list / manage your stored outputs | file list |
@@ -22,6 +22,24 @@ what you want (an image, a video, a voiceover); the server picks the model.
 | `get_status` | poll a job by `job_id` | job record |
 
 Every domain tool requires an `out` filename (e.g. `out: "portrait.jpg"`).
+
+## Improve the prompt first
+
+Before you submit any **generation** (image/video/audio create·edit·scene·speak·
+sfx·music), tune the user's request to the chosen model — each model prompts
+differently:
+
+1. **Consult the model's prompt guide** — `GET /v1/models/{kind}/prompt-guide`, or
+   the `## Prompt guide` section of the model's skill. It gives the model's
+   preferred structure, ideal length, phrasing, and what to avoid.
+2. **Rewrite** the request to follow it — better structure, the right level of
+   detail, the model's preferred style.
+3. **Offer it, don't impose it.** Show your improved prompt and one line on what you
+   changed ("tightened this for FLUX — use it, or your original?"), then generate
+   with whichever the user picks.
+
+Skip this only for trivial or explicit prompts, or when the user says "use exactly
+this".
 
 ## The workflow
 
