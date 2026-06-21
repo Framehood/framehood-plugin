@@ -32,7 +32,8 @@ Every domain tool requires an `out` filename (e.g. `out: "portrait.jpg"`).
    ones return a queued job: `{ "job_id": "job_…", "status": "queued" }`.
 3. **Poll** queued jobs with `get_status(job_id=…)` every few seconds until
    `status` is `succeeded` (then the result URL is in `outputs`:
-   `image_url` / `video_url` / `audio_url`) or `failed` (read `error`).
+   `image_url` / `video_url` / `audio_url`) or `failed` (read `error`). Give up
+   after ~20 polls and report the `job_id` so the user can check it later.
 4. **Report the output URL** to the user.
 
 ## Conventions
