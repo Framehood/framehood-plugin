@@ -1,7 +1,7 @@
 ---
 name: framehood
 description: Use when creating or editing images, video, or audio with Framehood — covers reading the overview first, the image/video/audio/qa/files tools, uploading a LOCAL file (data: URI or the create_upload + upload.py flow), the job→poll workflow, choosing a model (defaults + explicit model/params), prompt improvement, and credits. Trigger on requests to generate, edit, upscale, animate, lipsync, swap, caption, voice, compose, or upload media via the `framehood` MCP server.
-allowed-tools: Bash(python3 *)
+allowed-tools: Bash(python3 *skills/framehood/scripts/upload.py *)
 ---
 
 # Framehood
