@@ -82,6 +82,20 @@ music), tune the request to the model you'll use — models prompt differently:
 Skip this only for trivial/explicit prompts, or when the user says "use exactly
 this".
 
+## Assembling a finished video (reel, ad, mini-drama, mini-doc)
+
+When the user wants a **finished, edited** video built from parts — "собери ролик
+из этих кусков", "make me a 30s ad", "cut this into a reel", "put these shots
+together with music and subtitles" — don't just chain raw `video(assemble)`
+calls. Switch to the bundled **`video-montage`** skill: it carries the editing
+craft (format detection, cut rhythm, mute-first captions, audio hierarchy, the
+audio-length reconciliation pre-flight) and maps it to the exact Framehood call
+sequence (`video(assemble)` / `audio(mix)` / `video(captions)` / `video(lipsync)`
+/ `image(animate)` / `qa`). On the MCP side the same rules are also readable as
+the `montage://index` resource (plus per-format `montage://reels` · `ad` ·
+`mini-drama` · `mini-doc` and `montage://recipes`) — read `montage://index` first
+whenever a request maps to a finished-video deliverable.
+
 ## The workflow
 
 1. **Call the tool.** Fast actions return the finished result inline. Slower ones

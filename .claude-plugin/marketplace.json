@@ -11,7 +11,7 @@
     {
       "name": "framehood",
       "source": ".",
-      "description": "Generate and edit images, video and audio from Claude via the Framehood MCP server. Bundles the remote MCP endpoint, a /framehood command, and usage skills."
+      "description": "Generate and edit images, video and audio from Claude via the Framehood MCP server, and assemble finished videos (reels, ads, mini-dramas, mini-docs) from parts. Bundles the remote MCP endpoint, a /framehood command, and usage + video-montage skills."
     }
   ]
 }
