@@ -143,7 +143,7 @@ audio(action="music", prompt="warm restrained underscore", is_instrumental=true,
 # 3. Assemble visuals over the sync, music under everything
 video(action="assemble",
   clips=[establish_broll, interview1, process_broll, interview2, outcome_broll],
-  audio_url="sync.mp3",          # the spine
+  vo="sync.mp3", vo_level=0,     # the interview spine — foreground voice over the clips
   music="score.mp3",             music_level=-22,
   keep_clip_audio=true, clip_audio_level=0,
   format="16:9", tier="pro",
