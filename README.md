@@ -7,10 +7,9 @@ wires Claude Code to the Framehood MCP server and adds a command and skills.
 
 - **MCP server** (`framehood`) — the remote endpoint `https://mcp.framehood.ai/mcp`.
   On first use Claude Code runs the OAuth sign-in flow in your browser.
-- **`/framehood`** — a command for one-line generation requests.
+- **`/framehood:create`** — a command for one-line generation requests.
 - **`framehood` skill** — teaches Claude the image/video/audio tools and the
   job→poll workflow so it uses them well.
-- **`writing-claude-plugins` skill** — a guide for authoring your own plugins.
 
 ## Install
 
@@ -25,7 +24,7 @@ need a Framehood account — sign up at https://framehood.ai.
 ## Use
 
 ```
-/framehood a cinematic portrait of a lighthouse keeper as keeper.jpg
+/framehood:create a cinematic portrait of a lighthouse keeper as keeper.jpg
 ```
 
 Or just ask Claude naturally ("make me a 5-second clip of waves at sunset") —
