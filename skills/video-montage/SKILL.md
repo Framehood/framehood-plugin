@@ -26,6 +26,62 @@ Never dump all clips into one `assemble` call and hope. Plan the cut first.
 
 ---
 
+## Building a long or multi-shot video — choose the approach first
+
+Before cutting, decide HOW to produce the shots. A single generation caps at
+**~15 seconds** — on both Kling and Seedance (verified; the larger numbers you may
+see quoted are reference-video/audio *inputs*, not output length). Pick deliberately:
+
+**Up to ~15s — two single-generation options** (fast, one call, no stitching):
+
+- **Kling multi-shot** — `image(action="animate", image_url=…, multi_prompt=[{prompt, duration}, …], shot_type="customize")`. A structured storyboard rendered as one continuous clip: **≤6 shots, ≤15s total**, each shot 1–15s. `shot_type="intelligent"` lets the model plan the transitions. For precise start→end motion, also pass `end_image_url` — the clip interpolates from `image_url` (start frame) to it.
+- **Seedance storyboard** — `video(action="create", prompt="1) … 2) … 3) …", reference_images=[…])`. Multi-shot from a numbered shot-list written into the single prompt (there's no shot array for Seedance). Keep the same subjects across the shots with references (below).
+
+**Longer than 15s — assemble (this skill's core, and the ONLY path past 15s):**
+Generate each shot separately (each ≤15s), then stitch with
+`video(action="assemble", clips=[…], xfade_duration, music, vo, sfx_ambient, intro, ending)`.
+Anything multi-minute, or that needs per-shot review/regeneration, is always this
+path. (Seedance's "extend" / last-frame chaining is the same idea under the hood —
+sequential clips, then assemble.)
+
+**Consistency across shots — multiple references:**
+When a specific character / product / style must recur, build the reference set
+first, then feed it into generation:
+
+- `video(action="create", reference_images=[charFront, product, styleFrame])` — up to **9** image references; cite them in the prompt as **@Image1 … @ImageN** ("@Image1 is the character, @Image2 the product, @Image3 sets the style"). For Seedance you can also pass `video_urls` (≤3 motion references, cite `@Video1…` — the model copies their movement) and `audio_urls` (≤3 voice/music references, `@Audio1…`).
+- `video(action="edit_ref", video_url=…, reference_images=[…≤4 as @Image1…@Image4], elements={frontal_image_url, reference_image_urls})` — here **@Image** = appearance/style refs and **@Element1** = the identity subject (two distinct syntaxes). Call `models(action="guide", model=…)` for the exact per-model reference idiom before generating.
+- For a character that must recur across many separate jobs, prefer an **actor**
+  (`actor(action="create")` → reuse its `actor_id`) over raw reference images.
+
+Quick pick:
+- **>15s, or you want per-shot control** → generate shots, then `video(assemble)`.
+- **≤15s, one tight sequence, want it fast** → Kling `multi_prompt` or Seedance storyboard.
+- **Same subject must recur** → build the references once, reuse per shot, then assemble.
+
+## Control level — staged sign-off, or end-to-end?
+
+Independently of the approach, decide how much the user steers — and base it on
+their **revealed preference**, don't ask every time:
+
+- **Staged / supervised** — make the key frame(s) and the reference set first
+  (`image(create)`, `actor(create)`), show them, get a yes, THEN generate the clips
+  and assemble. Best for detailed / high-stakes briefs, and it pairs naturally with
+  the references approach. Correcting at the image stage is far cheaper and faster
+  than after the clips are generated.
+- **Autonomous / end-to-end** — run the whole generate-and-assemble chain and
+  present the finished cut, surfacing only blockers.
+
+How to choose:
+1. If prior turns show the user likes to approve each step → default **staged**; if
+   they say "just do it / handle it / surprise me" → default **end-to-end**.
+2. If their preference is **unknown**, offer the choice **once**, in one line —
+   *"Want me to make the key frames + references first for your sign-off (more
+   control), or run it end-to-end and show you the finished cut?"*
+3. Then **remember their answer** for the rest of the session and stop asking;
+   re-offer only if they signal a change.
+
+---
+
 ## Step 0 — Detect the format
 
 Pick ONE primary format. If the client is ambiguous, ask a single question, then

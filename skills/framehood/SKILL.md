@@ -96,6 +96,14 @@ the `montage://index` resource (plus per-format `montage://reels` · `ad` ·
 `mini-drama` · `mini-doc` and `montage://recipes`) — read `montage://index` first
 whenever a request maps to a finished-video deliverable.
 
+For a **long or multi-shot** video, remember a single generation caps at ~15s:
+under that, produce it in one call with Kling `image(animate, multi_prompt)` (≤6
+shots / ≤15s) or a Seedance `video(create)` prose storyboard; past 15s you
+generate the shots and stitch them with `video(assemble)`. Also pick a control
+level — offer the user staged sign-off (make the key frames / references first,
+get a yes, then generate) versus running it end-to-end once, then follow their
+revealed preference. The `video-montage` skill has the full A/B/C decision guide.
+
 ## The workflow
 
 1. **Call the tool.** Fast actions return the finished result inline. Slower ones
