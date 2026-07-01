@@ -108,9 +108,15 @@ revealed preference. The `video-montage` skill has the full A/B/C decision guide
 
 1. **Call the tool.** Fast actions return the finished result inline. Slower ones
    return a queued job: `{ "job_id": "job_…", "status": "queued" }`.
-2. **Poll** queued jobs with `get_status(job_id=…)` every few seconds until
-   `status` is `succeeded` (the result URL is in `outputs`: `image_url` /
-   `video_url` / `audio_url`) or `failed` (read `error`). Give up after ~20 polls
+2. **Poll** queued jobs with `get_status(job_id=…)` — but don't hammer it.
+   Generation takes real time: images finish in seconds–~1 min; video, audio, and
+   actor training take ~1–5 min. Wait ~30–60s before the FIRST poll (longer for
+   video), then poll about every 15s — **never faster than every ~10s**. The
+   server soft-throttles rapid polling: a reply with `polled_too_soon` /
+   `retry_after_seconds` just means wait that long and check again (it's not an
+   error and not terminal). Poll until `status` is `succeeded` (the result URL is
+   in `outputs`: `image_url` / `video_url` / `audio_url`) or `failed` (read
+   `error`); back off toward ~30s after several checks. Give up after ~20 checks
    and report the `job_id` so the user can check later.
 3. **Report the output URL** to the user.
 
