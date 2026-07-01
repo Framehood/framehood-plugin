@@ -1,7 +1,7 @@
 {
   "name": "framehood",
   "displayName": "Framehood",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Generate and edit images, video and audio from Claude using the Framehood MCP server.",
   "author": {
     "name": "Framehood",

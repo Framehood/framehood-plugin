@@ -1,6 +1,7 @@
 ---
 name: framehood
-description: Use when creating or editing images, video, or audio with Framehood — covers reading the overview first, the image/video/audio/qa/files tools, the job→poll workflow, choosing a model (defaults + explicit model/params), prompt improvement, and credits. Trigger on requests to generate, edit, upscale, animate, lipsync, swap, caption, voice, or compose media via the `framehood` MCP server.
+description: Use when creating or editing images, video, or audio with Framehood — covers reading the overview first, the image/video/audio/qa/files tools, uploading a LOCAL file (data: URI or the create_upload + upload.py flow), the job→poll workflow, choosing a model (defaults + explicit model/params), prompt improvement, and credits. Trigger on requests to generate, edit, upscale, animate, lipsync, swap, caption, voice, compose, or upload media via the `framehood` MCP server.
+allowed-tools: Bash(python3 *)
 ---
 
 # Framehood
@@ -16,6 +17,12 @@ which tools, actions, and models are available on *this* account (some
 capabilities are gated by plan, so this skill's lists are a guide, not a
 guarantee). Re-read it whenever a request doesn't map cleanly to a tool. Treat
 the overview — not this skill — as the source of truth.
+
+The overview also prints the live **server version**. If it advertises a tool or
+action this skill doesn't mention, use it (the overview wins) and let the user
+know Framehood has new capabilities; if the server looks older than what this
+skill describes, suggest they reconnect the Framehood connector (for server
+changes) or run `/plugin marketplace update framehood` (for plugin/skill changes).
 
 ## Tools
 
@@ -97,9 +104,36 @@ this".
   members without payment access can call `billing(request_upgrade)` to email
   their owner.
 
+## Using a local file (from the user's computer)
+
+Any `*_url` input (image_url, video_url, audio_url) needs a hosted URL — a local
+path won't work. Two ways to get one:
+
+**Small file (≤ 25 MB) — inline `data:` URI.** Read the file and pass it as a
+data URI directly to the media input; the server uploads it and uses the hosted
+URL automatically:
+`image(action="edit", image_url="data:image/png;base64,<...>", prompt, out)`.
+Also works via `files(upload, data="data:...")`.
+
+**Large / original-quality file — `create_upload` + the bundled `upload.py`.**
+The bytes go straight to storage over HTTP (not through the chat), so quality is
+preserved and there's no message-size limit (server cap applies):
+
+1. Call `files(action="create_upload", filename, content_type)` → you get
+   `{ upload_url, token, url }`.
+2. Run the bundled helper (it PUTs the file and prints the hosted URL):
+   ```bash
+   python3 ${CLAUDE_SKILL_DIR}/scripts/upload.py <local_file> --url <upload_url> --token <token>
+   ```
+3. Use the printed URL as the `image_url` / `video_url` / `audio_url`.
+
+The token is short-lived and scoped to your own storage; `upload.py` only ever
+sends the file to a `framehood.ai` host.
+
 ## Examples
 
 - "make a hero image" → `image(create, prompt, out, tier)`
+- "edit this photo on my disk" → `files(create_upload, filename, content_type)` → `python3 ${CLAUDE_SKILL_DIR}/scripts/upload.py <file> --url <upload_url> --token <token>` → `image(edit, image_url=<printed url>, prompt, out)`
 - "use FLUX pro specifically" → `models(list)` → `image(create, model="flux_pro", params, out)`
 - "which models can I use?" → `models(list)`
 - "upscale this" → `image(upscale, image_url, out)`
